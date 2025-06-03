@@ -7,12 +7,20 @@ width , height = 500,500
 
 facing = 'N'
 
+GreenWalls = [
+    [3,1]
+]
+
 Map = [
-    [0,1,1,1,0],
-    [1,0,0,1,0],
-    [1,1,0,1,0],
-    [1,0,2,0,1],
-    [1,1,1,1,1]
+    [1,1,1,1,1,1,1,1],
+    [1,0,1,1,1,1,1,1],
+    [1,0,0,0,0,0,0,1],
+    [1,1,1,1,1,1,0,1],
+    [1,0,0,0,1,1,0,1],
+    [1,0,1,0,1,1,0,1],
+    [1,0,1,0,0,0,0,1],
+    [1,2,1,0,1,1,0,1],
+    [1,1,1,1,1,1,1,1]
 ]
 
 #constructors
@@ -34,6 +42,9 @@ def EmptyScreen():
     for i in Screen.find_all():
         Screen.itemconfig(i,state='hidden')
 
+def CheckForBlue(CHAU,CHAD):
+    if Map[PlayerLocation[0]+CHAU][PlayerLocation[1]+CHAD] == 9:
+        pass
 
 def Keybinding(event):
     global facing , Map , PlayerLocation
@@ -74,12 +85,29 @@ def Keybinding(event):
     '''
 
     if event.keysym == 'Up':
-        
         if facing=='N':
             if Map[PlayerLocation[0]-1][PlayerLocation[1]] != 1:       
                 Map[PlayerLocation[0]][PlayerLocation[1]] = 0
                 Map[PlayerLocation[0]-1][PlayerLocation[1]] = 2
                 PlayerLocation = [PlayerLocation[0]-1,PlayerLocation[1]]
+
+        if facing=='S':
+            if Map[PlayerLocation[0]+1][PlayerLocation[1]] != 1:       
+                Map[PlayerLocation[0]][PlayerLocation[1]] = 0
+                Map[PlayerLocation[0]+1][PlayerLocation[1]] = 2
+                PlayerLocation = [PlayerLocation[0]+1,PlayerLocation[1]]
+
+        if facing == 'W':
+            if Map[PlayerLocation[0]][PlayerLocation[1]-1] != 1:
+                Map[PlayerLocation[0]][PlayerLocation[1]] = 0
+                Map[PlayerLocation[0]][PlayerLocation[1]-1] = 2
+                PlayerLocation = [PlayerLocation[0],PlayerLocation[1]-1]
+
+        if facing == 'E':
+            if Map[PlayerLocation[0]][PlayerLocation[1]+1] != 1:
+                Map[PlayerLocation[0]][PlayerLocation[1]] = 0
+                Map[PlayerLocation[0]][PlayerLocation[1]+1] = 2
+                PlayerLocation = [PlayerLocation[0],PlayerLocation[1]+1]
 
     elif event.keysym == 'Left':
         if facing == 'N':
@@ -119,8 +147,11 @@ def RefreshScreen():
             ChangeSegmentState(MRI)
             if Map[PlayerLocation[0]][PlayerLocation[1]+1]==0:
                 ChangeSegmentState(MRO)
-        if Map[PlayerLocation[0]-2][PlayerLocation[1]]==1:
-            ChangeSegmentState(MIDI)
+        try:
+            if Map[PlayerLocation[0]-2][PlayerLocation[1]]==1:
+                ChangeSegmentState(MIDI)
+        except:
+            pass
         if Map[PlayerLocation[0]-1][PlayerLocation[1]]==1:
             ChangeSegmentState(Mid)
             Screen.itemconfig(MLI,state='hidden')
@@ -139,7 +170,67 @@ def RefreshScreen():
         if Map[PlayerLocation[0]-1][PlayerLocation[1]-1]==1:
             ChangeSegmentState(MRI)
             if Map[PlayerLocation[0]-1][PlayerLocation[1]]==0:
-                ChangeSegmentState(MRO)#NOT FINISHED HERE
+                ChangeSegmentState(MRO)
+        try:
+            if Map[PlayerLocation[0]][PlayerLocation[1]-2]==1:
+                ChangeSegmentState(MIDI)
+        except:
+            pass
+        if Map[PlayerLocation[0]][PlayerLocation[1]-1]==1:
+            ChangeSegmentState(Mid)
+            Screen.itemconfig(MLI,state='hidden')
+            Screen.itemconfig(MRI,state='hidden')
+            Screen.itemconfig(MIDI,state='hidden')
+
+    if facing == "E":
+        if Map[PlayerLocation[0]-1][PlayerLocation[1]]==1:
+            ChangeSegmentState(LO)
+        if Map[PlayerLocation[0]+1][PlayerLocation[1]]==1:
+            ChangeSegmentState(RO)
+        if Map[PlayerLocation[0]-1][PlayerLocation[1]+1]==1:
+            ChangeSegmentState(MLI)
+            if Map[PlayerLocation[0]-1][PlayerLocation[1]]==0:
+                ChangeSegmentState(MLO) 
+        if Map[PlayerLocation[0]+1][PlayerLocation[1]+1]==1:
+            ChangeSegmentState(MRI)
+            if Map[PlayerLocation[0]+1][PlayerLocation[1]]==0:
+                ChangeSegmentState(MRO) 
+        try:
+            if Map[PlayerLocation[0]][PlayerLocation[1]+2]==1:
+                ChangeSegmentState(MIDI)
+        except:
+            pass
+        if Map[PlayerLocation[0]][PlayerLocation[1]+1]==1:
+            ChangeSegmentState(Mid)
+            Screen.itemconfig(MLI,state='hidden')
+            Screen.itemconfig(MRI,state='hidden')
+            Screen.itemconfig(MIDI,state='hidden')
+
+    if facing == 'S':
+        if Map[PlayerLocation[0]][PlayerLocation[1]+1]==1:
+            ChangeSegmentState(LO)
+        if Map[PlayerLocation[0]][PlayerLocation[1]-1]==1:
+            ChangeSegmentState(RO)
+        if Map[PlayerLocation[0]+1][PlayerLocation[1]+1]==1:
+            ChangeSegmentState(MLI)
+            if Map[PlayerLocation[0]][PlayerLocation[1]+1]==0:
+                ChangeSegmentState(MLO)
+        if Map[PlayerLocation[0]+1][PlayerLocation[1]-1]==1:
+            ChangeSegmentState(MRI)
+            if Map[PlayerLocation[0]][PlayerLocation[1]-1]==0:
+                ChangeSegmentState(MRO)
+        try:
+            if Map[PlayerLocation[0]+2][PlayerLocation[1]]==1:
+                ChangeSegmentState(MIDI)
+        except:
+            pass
+        if Map[PlayerLocation[0]+1][PlayerLocation[1]]==1:
+            ChangeSegmentState(Mid)
+            Screen.itemconfig(MLI,state='hidden')
+            Screen.itemconfig(MRI,state='hidden')
+            Screen.itemconfig(MIDI,state='hidden')
+        
+
 
 
 
