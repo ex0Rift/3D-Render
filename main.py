@@ -19,8 +19,8 @@ Map = [
     [1,0,1,1,1,1,1,1,1,0,1,1,1],
     [1,1,1,1,1,1,0,1,1,0,1,0,1],
     [1,0,0,0,1,1,0,1,0,0,1,0,1],
-    [1,0,1,0,1,1,0,1,0,1,1,0,1],
-    [1,0,1,0,0,0,0,1,0,0,1,0,1],
+    [1,1,1,0,1,1,0,1,0,1,1,0,1],
+    [0,0,0,0,0,0,0,1,0,0,1,0,1],
     [1,2,1,0,1,1,0,0,0,0,0,0,1],
     [1,1,1,1,1,1,1,1,1,1,1,1,1]
 ]
@@ -168,6 +168,10 @@ def RefreshScreen():
         try:
             if Map[PlayerLocation[0]-2][PlayerLocation[1]]==1:
                 ChangeSegmentState(MIDI)
+                if Map[PlayerLocation[0]-1][PlayerLocation[1]-1]==0:
+                    ChangeSegmentState(LMI)
+                if Map[PlayerLocation[0]-1][PlayerLocation[1]+1]==0:
+                    ChangeSegmentState(RMI)
         except:
             pass
         if Map[PlayerLocation[0]-1][PlayerLocation[1]]==1:
@@ -192,6 +196,10 @@ def RefreshScreen():
         try:
             if Map[PlayerLocation[0]][PlayerLocation[1]-2]==1:
                 ChangeSegmentState(MIDI)
+                if Map[PlayerLocation[0]+1][PlayerLocation[1]-1]==0:
+                    ChangeSegmentState(LMI)
+                if Map[PlayerLocation[0]-1][PlayerLocation[1]-1]==0:
+                    ChangeSegmentState(RMI)
         except:
             pass
         if Map[PlayerLocation[0]][PlayerLocation[1]-1]==1:
@@ -216,9 +224,41 @@ def RefreshScreen():
         try:
             if Map[PlayerLocation[0]][PlayerLocation[1]+2]==1:
                 ChangeSegmentState(MIDI)
+                if Map[PlayerLocation[0]-1][PlayerLocation[1]+1]==0:
+                    ChangeSegmentState(LMI)
+                if Map[PlayerLocation[0]+1][PlayerLocation[1]+1]==0:
+                    ChangeSegmentState(RMI)
         except:
             pass
         if Map[PlayerLocation[0]][PlayerLocation[1]+1]==1:
+            ChangeSegmentState(Mid)
+            Screen.itemconfig(MLI,state='hidden')
+            Screen.itemconfig(MRI,state='hidden')
+            Screen.itemconfig(MIDI,state='hidden')
+
+    if facing == 'S':
+        if Map[PlayerLocation[0]][PlayerLocation[1]+1]==1:
+            ChangeSegmentState(LO)
+        if Map[PlayerLocation[0]][PlayerLocation[1]-1]==1:
+            ChangeSegmentState(RO)
+        if Map[PlayerLocation[0]+1][PlayerLocation[1]+1]==1:
+            ChangeSegmentState(MLI)
+            if Map[PlayerLocation[0]][PlayerLocation[1]+1]==0:
+                ChangeSegmentState(MLO)
+        if Map[PlayerLocation[0]+1][PlayerLocation[1]-1]==1:
+            ChangeSegmentState(MRI)
+            if Map[PlayerLocation[0]][PlayerLocation[1]-1]==0:
+                ChangeSegmentState(MRO)
+        try:
+            if Map[PlayerLocation[0]+2][PlayerLocation[1]]==1:
+                ChangeSegmentState(MIDI)
+                if Map[PlayerLocation[0]+1][PlayerLocation[1]+1]==0:
+                    ChangeSegmentState(LMI)
+                if Map[PlayerLocation[0]+1][PlayerLocation[1]-1]==0:
+                    ChangeSegmentState(RMI)
+        except:
+            pass
+        if Map[PlayerLocation[0]+1][PlayerLocation[1]]==1:
             ChangeSegmentState(Mid)
             Screen.itemconfig(MLI,state='hidden')
             Screen.itemconfig(MRI,state='hidden')
@@ -372,34 +412,7 @@ def RefreshScreen():
     except:
         pass
 
-    if facing == 'S':
-        if Map[PlayerLocation[0]][PlayerLocation[1]+1]==1:
-            ChangeSegmentState(LO)
-        if Map[PlayerLocation[0]][PlayerLocation[1]-1]==1:
-            ChangeSegmentState(RO)
-        if Map[PlayerLocation[0]+1][PlayerLocation[1]+1]==1:
-            ChangeSegmentState(MLI)
-            if Map[PlayerLocation[0]][PlayerLocation[1]+1]==0:
-                ChangeSegmentState(MLO)
-        if Map[PlayerLocation[0]+1][PlayerLocation[1]-1]==1:
-            ChangeSegmentState(MRI)
-            if Map[PlayerLocation[0]][PlayerLocation[1]-1]==0:
-                ChangeSegmentState(MRO)
-        try:
-            if Map[PlayerLocation[0]+2][PlayerLocation[1]]==1:
-                ChangeSegmentState(MIDI)
-        except:
-            pass
-        if Map[PlayerLocation[0]+1][PlayerLocation[1]]==1:
-            ChangeSegmentState(Mid)
-            Screen.itemconfig(MLI,state='hidden')
-            Screen.itemconfig(MRI,state='hidden')
-            Screen.itemconfig(MIDI,state='hidden')
         
-
-
-
-
 def EXIT(event=None):
     root.destroy()
     sys.exit()
@@ -438,6 +451,9 @@ if __name__ == "__main__":
 
     RTC=Screen.create_polygon(500,0,400,100,500,100,fill='gray60',outline='gold',width=5,state='hidden')
     RBC=Screen.create_polygon(500,500,400,400,500,400,fill='gray60',outline='gold',width=5,state='hidden')
+
+    LMI=Screen.create_rectangle(100,200,200,300,fill='gray60',outline='gold',width=5,state='hidden')
+    RMI=Screen.create_rectangle(300,200,400,300,fill='gray60',outline='gold',width=5,state='hidden')
 
     '''
     ############## Create Map segments ##############
