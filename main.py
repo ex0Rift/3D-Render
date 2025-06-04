@@ -9,21 +9,21 @@ facing = 'N'
 
 MiniMapObjects=[]
 
-GreenWalls = [
-    [3,1]
-]
+Map=[]
 
-Map = [
-    [1,1,1,1,1,1,1,1,1,1,1,1,1],
-    [1,0,0,0,0,0,0,0,0,0,0,0,1],
-    [1,0,1,1,1,1,1,1,1,0,1,1,1],
-    [1,1,1,1,1,1,0,1,1,0,1,0,1],
-    [1,0,0,0,1,1,0,1,0,0,1,0,1],
-    [1,1,1,0,1,1,0,1,0,1,1,0,1],
-    [0,0,0,0,0,0,0,1,0,0,1,0,1],
-    [1,2,1,0,1,1,0,0,0,0,0,0,1],
-    [1,1,1,1,1,1,1,1,1,1,1,1,1]
-]
+with open('Map.txt','r')as file:
+    while True:
+        Temp=file.readline().strip()
+        if Temp == '':
+            break
+
+        Temp=Temp.split(' ')
+        for i in range(len(Temp)):
+            Temp[i]=int(Temp[i])
+
+
+        Map.append(Temp)
+
 
 #constructors
 
@@ -179,6 +179,8 @@ def RefreshScreen():
             Screen.itemconfig(MLI,state='hidden')
             Screen.itemconfig(MRI,state='hidden')
             Screen.itemconfig(MIDI,state='hidden')
+            Screen.itemconfig(RMI,state='hidden')
+            Screen.itemconfig(LMI,state='hidden')
 
     if facing == "W":
         if Map[PlayerLocation[0]+1][PlayerLocation[1]]==1:
@@ -207,6 +209,8 @@ def RefreshScreen():
             Screen.itemconfig(MLI,state='hidden')
             Screen.itemconfig(MRI,state='hidden')
             Screen.itemconfig(MIDI,state='hidden')
+            Screen.itemconfig(RMI,state='hidden')
+            Screen.itemconfig(LMI,state='hidden')
 
     if facing == "E":
         if Map[PlayerLocation[0]-1][PlayerLocation[1]]==1:
@@ -235,6 +239,8 @@ def RefreshScreen():
             Screen.itemconfig(MLI,state='hidden')
             Screen.itemconfig(MRI,state='hidden')
             Screen.itemconfig(MIDI,state='hidden')
+            Screen.itemconfig(RMI,state='hidden')
+            Screen.itemconfig(LMI,state='hidden')
 
     if facing == 'S':
         if Map[PlayerLocation[0]][PlayerLocation[1]+1]==1:
@@ -263,6 +269,8 @@ def RefreshScreen():
             Screen.itemconfig(MLI,state='hidden')
             Screen.itemconfig(MRI,state='hidden')
             Screen.itemconfig(MIDI,state='hidden')
+            Screen.itemconfig(RMI,state='hidden')
+            Screen.itemconfig(LMI,state='hidden')
         
     '''
     ############## MiniMap code ##############
@@ -412,6 +420,21 @@ def RefreshScreen():
     except:
         pass
 
+    '''
+    ############## Win Logic ##############
+    '''
+    if PlayerLocation[0]==WinLocation[0] and PlayerLocation[1]==WinLocation[1]:
+        print('WIN')
+        root.destroy()
+
+        Win = Tk()
+
+        Win.config(bg='green')
+        
+        Win.attributes('-fullscreen',True)
+
+        Win.mainloop()
+
         
 def EXIT(event=None):
     root.destroy()
@@ -488,6 +511,16 @@ if __name__ == "__main__":
         print(PlayerLocation)
     except:
         print('[FATAL EEROR]PLAYER NOT ON MAP CLOSING')
+        EXIT()
+
+    for i in range(len(Map)-1):
+        for j in range(len(Map[i])-1):
+            if Map[i][j]==3:
+                WinLocation=[i,j]
+    try:
+        print(WinLocation)
+    except:
+        print('[FATAL EEROR]NO WIN LOCATION')
         EXIT()
 
     if Map[PlayerLocation[0]][PlayerLocation[1]-1]==1:
