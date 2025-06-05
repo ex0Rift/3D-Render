@@ -1,10 +1,23 @@
 from tkinter import *
+import math
 
 #vars
 
 width , height = 500,500
 
 Location =  [300,300]
+PlayerAngle=90
+
+ObjectWidth=100
+
+Map = [
+    [0,0,1,0,0,0],
+    [0,0,0,0,0,0],
+    [0,0,0,0,0,1],
+    [1,0,0,0,0,0],
+    [0,0,0,0,0,0],
+    [0,0,0,1,0,0]
+]
 
 #constructors
 root = Tk()
